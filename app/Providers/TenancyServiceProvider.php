@@ -7,6 +7,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
 use Stancl\Tenancy\Jobs;
@@ -104,6 +105,7 @@ class TenancyServiceProvider extends ServiceProvider
         $this->bootEvents();
         $this->mapRoutes();
         $this->mapCentralRoutes();
+        $this->prepareLivewireForTenancy();
 
         $this->makeTenancyMiddlewareHighestPriority();
     }
@@ -119,6 +121,19 @@ class TenancyServiceProvider extends ServiceProvider
                 Event::listen($event, $listener);
             }
         }
+    }
+
+    protected function prepareLivewireForTenancy(): void
+    {
+        Livewire::setUpdateRoute(function ($handle) {
+            return Route::post('livewire/update', $handle)
+                ->middleware([
+                    'web',
+                    'universal',
+                    Middleware\InitializeTenancyByDomain::class,
+                ])
+                ->name('livewire.update');
+        });
     }
 
     protected function mapCentralRoutes(): void
