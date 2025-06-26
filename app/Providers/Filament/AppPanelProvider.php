@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\SetAppUrlForTenant;
+use App\Http\Middleware\TenantFileUrlMiddleware;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -22,11 +24,13 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
+use function app_path;
+
 class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        return $panel
+        $panel = $panel
             ->id('app')
             ->path('/app')
             ->login()
@@ -35,6 +39,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Tenant/App/Resources'), for: 'App\\Filament\\Tenant\\App\\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/App/Pages'), for: 'App\\Filament\\Tenant\\App\\Pages')
+            ->discoverClusters(in: app_path('Filament/Tenant/Clusters'), for: 'App\\Filament\\Tenant\\Clusters')
             ->pages([
                 Pages\Dashboard::class,
             ])
@@ -45,6 +50,8 @@ class AppPanelProvider extends PanelProvider
             ])
             ->middleware([
                 InitializeTenancyByDomain::class,
+                SetAppUrlForTenant::class,
+                TenantFileUrlMiddleware::class,
                 PreventAccessFromCentralDomains::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -66,5 +73,8 @@ class AppPanelProvider extends PanelProvider
                 PanelsRenderHook::SIDEBAR_NAV_START,
                 fn (): string => Blade::render('@livewire("tenant-switcher")')
             );
+
+        return $panel;
+
     }
 }

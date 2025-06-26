@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Http\Middleware\TenantFileUrlMiddleware;
+use App\Jobs\CreateFrameworkDirectoriesForTenant;
+use App\Jobs\DeleteFrameworkDirectoriesForTenant;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Features\SupportFileUploads\FilePreviewController;
 use Livewire\Livewire;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
@@ -30,6 +34,7 @@ class TenancyServiceProvider extends ServiceProvider
                 JobPipeline::make([
                     Jobs\CreateDatabase::class,
                     Jobs\MigrateDatabase::class,
+                    CreateFrameworkDirectoriesForTenant::class,
                     // Jobs\SeedDatabase::class,
 
                     // Your own jobs to prepare the tenant.
@@ -46,6 +51,7 @@ class TenancyServiceProvider extends ServiceProvider
             Events\DeletingTenant::class => [],
             Events\TenantDeleted::class => [
                 JobPipeline::make([
+                    DeleteFrameworkDirectoriesForTenant::class,
                     Jobs\DeleteDatabase::class,
                 ])->send(function (Events\TenantDeleted $event) {
                     return $event->tenant;
@@ -131,9 +137,12 @@ class TenancyServiceProvider extends ServiceProvider
                     'web',
                     'universal',
                     Middleware\InitializeTenancyByDomain::class,
+                    TenantFileUrlMiddleware::class,
                 ])
                 ->name('livewire.update');
         });
+
+        FilePreviewController::$middleware = ['web', 'universal', Middleware\InitializeTenancyByDomain::class];
     }
 
     protected function mapCentralRoutes(): void
