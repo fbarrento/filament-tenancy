@@ -4,9 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection as SupportCollection;
 use Stancl\Tenancy\Contracts\Syncable;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 
@@ -54,6 +56,18 @@ class User extends Authenticatable implements Syncable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * @return SupportCollection<int, Tenant>|array<int, Tenant>
+     */
+    public function getTenants(Panel $panel): SupportCollection|array
+    {
+
+        return CentralUser::query()
+            ->where('global_id', $this->global_id)
+            ->first()
+            ->tenants;
     }
 
     public function getGlobalIdentifierKey()

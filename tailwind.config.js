@@ -3,7 +3,9 @@ import typography from '@tailwindcss/typography'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [],
+  content: [
+      './resources/views/**/*.blade.php'
+  ],
   theme: {
     extend: {},
   },

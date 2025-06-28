@@ -29,7 +29,7 @@ class CreateTenant extends CreateRecord
         /** @var Tenant $tenant */
         $tenant = $this->getRecord();
 
-        $createTenantDomainAction->handle($tenant, $this->data['domain'].'.'.request()->getHost());
+        $createTenantDomainAction->handle($tenant, $this->data['domain']);
         $createTenantUserAction->handle($tenant, auth()->user());
 
     }

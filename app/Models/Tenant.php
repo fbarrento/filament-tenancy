@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDomains;
@@ -15,7 +17,8 @@ use Stancl\Tenancy\Database\Models\TenantPivot;
  * @property string $id
  * @property string $name
  * @property string $short_name
- * @property array $avatar
+ * @property string $avatar
+ * @property string|null $avatar_url
  */
 final class Tenant extends BaseTenant implements TenantWithDatabase
 {
@@ -32,6 +35,23 @@ final class Tenant extends BaseTenant implements TenantWithDatabase
             'short_name',
             'avatar',
         ];
+    }
+
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function (): ?string {
+                if (! $this->avatar) {
+                    return null;
+                }
+                if (tenancy()->initialized) {
+                    return Storage::disk('public')->url($this->avatar);
+                }
+                $tenantPrefix = config('tenancy.filesystem.suffix_base').$this->id;
+
+                return url("/{$tenantPrefix}/{$this->avatar}");
+            }
+        );
     }
 
     /**

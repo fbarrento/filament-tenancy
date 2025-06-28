@@ -1,0 +1,34 @@
+@import url(https://fonts.bunny.net/css?family=poppins:300,400,500,600,700,800,900);
+
+@import "tailwindcss";
+
+@source "../../../resources/views";
+
+
+@theme {
+    --font-sans:  'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* DaisyUI with Tailwind v4 syntax */
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+
+/* MaryUI specific styles */
+@source "../../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
+
+/* Theme toggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/**
+* Paginator - Traditional style
+* Because Laravel defaults does not match well the design of daisyUI.
+*/
+
+.mary-table-pagination span[aria-current="page"] > span {
+    @apply bg-primary text-base-100
+}
+
+.mary-table-pagination button {
+    @apply cursor-pointer
+}

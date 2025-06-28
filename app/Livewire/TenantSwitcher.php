@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use const PHP_URL_HOST;
+
 use App\Models\CentralUser;
 use App\Models\Tenant;
 use App\Models\User;
@@ -12,6 +14,8 @@ use Illuminate\View\View;
 use Livewire\Component;
 
 use function auth;
+use function config;
+use function parse_url;
 use function tenancy;
 use function tenant_route;
 
@@ -42,10 +46,13 @@ class TenantSwitcher extends Component
     {
 
         $user = $tenant->run(fn () => User::query()->where('global_id', auth()->user()->global_id)->first());
-        $redirectUrl = tenant_route($tenant->domains->first()->domain, 'filament.app.pages.dashboard');
+        $hostname = parse_url(config()->string('app.url'), PHP_URL_HOST);
+        $domain = $tenant->domains->first()->domain.'.'.$hostname;
+
+        $redirectUrl = tenant_route($domain, 'filament.app.pages.dashboard');
         $token = tenancy()->impersonate($tenant, $user->id, $redirectUrl);
 
-        return redirect()->away(tenant_route($tenant->domains->first()->domain, 'impersonate', ['token' => $token]));
+        return redirect()->away(tenant_route($domain, 'impersonate', ['token' => $token], true));
     }
 
     public function render(): View

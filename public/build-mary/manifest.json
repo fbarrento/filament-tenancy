@@ -1,0 +1,19 @@
+{
+  "src/css/app.css": {
+    "file": "css/app.CawoPBlK.css",
+    "src": "src/css/app.css",
+    "isEntry": true,
+    "names": [
+      "app.css"
+    ]
+  },
+  "src/js/app.js": {
+    "file": "js/app.DmPxh4nv.js",
+    "name": "app",
+    "src": "src/js/app.js",
+    "isEntry": true,
+    "css": [
+      "css/app.CawoPBlK.css"
+    ]
+  }
+}

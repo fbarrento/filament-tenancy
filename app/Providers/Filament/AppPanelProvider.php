@@ -12,25 +12,24 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 use function app_path;
+use function tenant;
 
 class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $panel = $panel
+        return $panel
             ->id('app')
             ->path('/app')
             ->login()
@@ -49,7 +48,7 @@ class AppPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
-                InitializeTenancyByDomain::class,
+                InitializeTenancyBySubdomain::class,
                 SetAppUrlForTenant::class,
                 TenantFileUrlMiddleware::class,
                 PreventAccessFromCentralDomains::class,
@@ -69,12 +68,8 @@ class AppPanelProvider extends PanelProvider
             ->viteTheme(
                 'resources/css/filament/theme.css',
             )
-            ->renderHook(
-                PanelsRenderHook::SIDEBAR_NAV_START,
-                fn (): string => Blade::render('@livewire("tenant-switcher")')
-            );
-
-        return $panel;
+            ->brandName(fn (): string => tenant('short_name') ?? tenant('name'))
+            ->favicon(fn (): string => tenant('avatar_url') ?? '');
 
     }
 }

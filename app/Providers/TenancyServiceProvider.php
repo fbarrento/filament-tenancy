@@ -136,13 +136,13 @@ class TenancyServiceProvider extends ServiceProvider
                 ->middleware([
                     'web',
                     'universal',
-                    Middleware\InitializeTenancyByDomain::class,
+                    Middleware\InitializeTenancyBySubdomain::class,
                     TenantFileUrlMiddleware::class,
                 ])
                 ->name('livewire.update');
         });
 
-        FilePreviewController::$middleware = ['web', 'universal', Middleware\InitializeTenancyByDomain::class];
+        FilePreviewController::$middleware = ['web', 'universal', Middleware\InitializeTenancyBySubdomain::class];
     }
 
     protected function mapCentralRoutes(): void

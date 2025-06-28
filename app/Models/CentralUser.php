@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Database\Factories\CentralUserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,9 +26,9 @@ use Stancl\Tenancy\Database\Models\TenantPivot;
  * @property string $created_at
  * @property string $updated_at
  */
-final class CentralUser extends Authenticatable implements SyncMaster
+final class CentralUser extends Authenticatable implements MustVerifyEmail, SyncMaster
 {
-    use CentralConnection, ResourceSyncing;
+    use CentralConnection, Notifiable, ResourceSyncing;
 
     /** @use HasFactory<CentralUserFactory> */
     use HasFactory, Notifiable;

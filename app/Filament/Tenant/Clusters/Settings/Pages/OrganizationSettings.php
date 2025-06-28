@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Clusters\Settings\Pages;
 
 use App\Filament\Tenant\Clusters\Settings;
 use App\Models\Tenant;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -12,15 +13,14 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Livewire\WithFileUploads;
+use Filament\Support\Exceptions\Halt;
 
 use function __;
-use function is_array;
 use function tenant;
 
 class OrganizationSettings extends Page implements HasForms
 {
-    use InteractsWithForms, WithFileUploads;
+    use InteractsWithForms;
 
     public ?array $data = [];
 
@@ -62,9 +62,12 @@ class OrganizationSettings extends Page implements HasForms
                 Section::make(__('Avatar'))
                     ->schema([
                         FileUpload::make('avatar')
-                            ->disk('public')
                             ->label(false)
+                            ->disk('public')
+                            ->visibility('public')
                             ->directory('avatar')
+                            ->imageEditor()
+                            ->circleCropper()
                             ->avatar()
                             ->image(),
                     ]),
@@ -73,20 +76,27 @@ class OrganizationSettings extends Page implements HasForms
             ->model($this->tenant);
     }
 
+    protected function getFormActions(): array
+    {
+        return [
+            Action::make('save')
+                ->label(__('Save changes'))
+                ->keyBindings(['command+s', 'ctrl+s'])
+                ->submit('save'),
+        ];
+    }
+
     public function save(): void
     {
 
-        if ($files = $this->data['avatar']) {
-            $uploadedFile = null;
-            if (is_array($files)) {
-                foreach ($files as $key => $file) {
-                    $uploadedFile = $file->store('avatar', 'public');
-                }
-                $this->data['avatar'] = $uploadedFile;
-            }
-        }
+        try {
+            $data = $this->form->getState();
 
-        $this->tenant->update($this->data);
+            $this->tenant->update($data);
+
+        } catch (Halt $exception) {
+            return;
+        }
 
         Notification::make()
             ->title(__('Organization Settings Saved'))
