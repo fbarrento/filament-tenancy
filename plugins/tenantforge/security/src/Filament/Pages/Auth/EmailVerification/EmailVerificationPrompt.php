@@ -31,11 +31,7 @@ final class EmailVerificationPrompt extends BaseEmailVerificationPrompt
                     return;
                 }
 
-                // dd($this->getVerifiable());
-
                 $this->getVerifiable()->sendEmailVerificationNotification();
-
-                // $this->sendEmailVerificationNotification($this->getVerifiable());
 
                 Notification::make()
                     ->title(__('filament-panels::pages/auth/email-verification/email-verification-prompt.notifications.notification_resent.title'))
