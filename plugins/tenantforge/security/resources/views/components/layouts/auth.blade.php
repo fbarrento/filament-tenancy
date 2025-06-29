@@ -9,7 +9,7 @@
             <div class="my-16">
                 <h2 class="text-lg font-semibold">{{ $heading ?? 'You must set the heading.' }}</h2>
                 <p class="text-sm text-gray-600">
-                    {{ $description ?? 'Experience the power of' . filament()->getBrandName() .'.' }}
+                    {{ $description ?? 'Experience the power of ' . filament()->getBrandName() .'.' }}
                 </p>
             </div>
 
