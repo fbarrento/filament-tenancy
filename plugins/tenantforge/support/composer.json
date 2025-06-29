@@ -1,0 +1,30 @@
+{
+    "name": "tenant-forge/support",
+    "description": "TenantForge Support",
+    "authors": [
+        {
+            "name": "Francisco Barrento",
+            "email": "francisco.barrento@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TenantForge\\Support\\SupportServiceProvider"
+            ]
+        },
+        "aliases": {}
+    },
+    "autoload": {
+        "psr-4": {
+            "TenantForge\\Support\\": "src/",
+            "TenantForge\\Support\\Database\\Factories\\": "database/factories/",
+            "TenantForge\\Support\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TenantForge\\Support\\Tests\\": "tests/"
+        }
+    }
+}

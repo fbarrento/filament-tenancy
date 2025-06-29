@@ -18,14 +18,19 @@ use Stancl\Tenancy\Jobs;
 use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
 
+use function base_path;
 use function config;
+use function file_exists;
 
 class TenancyServiceProvider extends ServiceProvider
 {
     // By default, no namespace is used to support the callable array syntax.
     public static string $controllerNamespace = '';
 
-    public function events()
+    /**
+     * @return array<string, mixed>
+     */
+    public function events(): array
     {
         return [
             // Tenant events
@@ -109,9 +114,10 @@ class TenancyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootEvents();
-        $this->mapRoutes();
-        $this->mapCentralRoutes();
         $this->prepareLivewireForTenancy();
+        $this->mapRoutes();
+        $this->mapUniversalRoutes();
+        $this->mapCentralRoutes();
 
         $this->makeTenancyMiddlewareHighestPriority();
     }
@@ -160,6 +166,17 @@ class TenancyServiceProvider extends ServiceProvider
         return config()->array('tenancy.central_domains');
     }
 
+    protected function mapUniversalRoutes(): void
+    {
+        $this->app->booted(function () {
+            if (file_exists(base_path('routes/universal.php'))) {
+                Route::middleware('web')
+                    ->namespace(static::$controllerNamespace)
+                    ->group(base_path('routes/universal.php'));
+            }
+        });
+    }
+
     protected function mapRoutes(): void
     {
         $this->app->booted(function () {
@@ -175,9 +192,8 @@ class TenancyServiceProvider extends ServiceProvider
         $tenancyMiddleware = [
             // Even higher priority than the initialization middleware
             Middleware\PreventAccessFromCentralDomains::class,
-
-            Middleware\InitializeTenancyByDomain::class,
             Middleware\InitializeTenancyBySubdomain::class,
+            Middleware\InitializeTenancyByDomain::class,
             Middleware\InitializeTenancyByDomainOrSubdomain::class,
             Middleware\InitializeTenancyByPath::class,
             Middleware\InitializeTenancyByRequestData::class,

@@ -1,4 +1,4 @@
-@php use App\Filament\Guest\Pages\Login;use App\Filament\Guest\Pages\Register; @endphp
+@php @endphp
     <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ isset($dark) ? 'dark' : '' }}">
 <head>
@@ -26,7 +26,7 @@
     <x-slot:actions>
         <x-button
             label="{{__('Sign in')}}"
-            link="{{route('filament.guest.auth.login')}}"
+            link="{{route('login')}}"
             class="btn-ghost btn-sm"
             responsive/>
         <x-button

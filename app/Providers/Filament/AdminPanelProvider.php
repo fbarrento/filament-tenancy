@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use TenantForge\Security\SecurityPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,10 +28,9 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
             ->profile()
-            ->emailVerification()
-            ->emailVerificationRoutePrefix('email-verification')
+            // ->emailVerification()
+            // ->emailVerificationRoutePrefix('email-verification')
             ->registration()
             ->registrationRouteSlug('register')
             ->colors([
@@ -54,10 +54,13 @@ class AdminPanelProvider extends PanelProvider
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
-                // EnsureEmailIsVerified::class,
+                EnsureEmailIsVerified::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->plugins([
+                SecurityPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,

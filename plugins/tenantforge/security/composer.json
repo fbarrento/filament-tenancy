@@ -1,0 +1,30 @@
+{
+    "name": "tenant-forge/security",
+    "description": "TenantForge Security",
+    "authors": [
+        {
+            "name": "Francisco Barrento",
+            "email": "francisco.barrento@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SupportServiceProvider"
+            ]
+        },
+        "aliases": {}
+    },
+    "autoload": {
+        "psr-4": {
+            "TenantForge\\Security\\": "src/",
+            "TenantForge\\Security\\Database\\Factories\\": "database/factories/",
+            "TenantForge\\Security\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TenantForge\\Security\\Tests\\": "tests/"
+        }
+    }
+}
