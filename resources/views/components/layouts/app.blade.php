@@ -31,7 +31,7 @@
             responsive/>
         <x-button
             label="{{__('Sign up')}}"
-            link="{{route('filament.guest.auth.register')}}"
+            link="{{route('register')}}"
             class="btn-outline btn-sm"
             responsive/>
         <x-theme-toggle class="btn btn-circle btn-ghost"/>

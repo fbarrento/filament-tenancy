@@ -23,6 +23,7 @@ use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 use function app_path;
+use function tenancy;
 use function tenant;
 
 class AppPanelProvider extends PanelProvider
@@ -31,6 +32,7 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->id('app')
+            ->default(tenancy()->initialized)
             ->path('/app')
             ->colors([
                 'primary' => Color::Amber,

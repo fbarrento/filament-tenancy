@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use const PHP_URL_HOST;
+
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -20,19 +22,20 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use TenantForge\Security\SecurityPlugin;
 
+use function config;
+use function parse_url;
+use function tenancy;
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
             ->id('admin')
+            ->default(! tenancy()->initialized)
             ->path('admin')
+            ->domain(parse_url(config()->string('app.url'), PHP_URL_HOST))
             ->profile()
-            // ->emailVerification()
-            // ->emailVerificationRoutePrefix('email-verification')
-            ->registration()
-            ->registrationRouteSlug('register')
             ->colors([
                 'primary' => Color::Amber,
             ])

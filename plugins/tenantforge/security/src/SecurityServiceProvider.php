@@ -16,6 +16,7 @@ final class SecurityServiceProvider extends ServiceProvider
         $this->registerMigrations();
         $this->mapCentralRoutes();
         $this->mapUniversalRoutes();
+        $this->mapTenantRoutes();
         $this->registerViews();
     }
 
@@ -27,6 +28,18 @@ final class SecurityServiceProvider extends ServiceProvider
     protected function registerMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+    }
+
+    protected function mapTenantRoutes(): void
+    {
+
+        $this->app->booted(function () {
+            if (file_exists(__DIR__.'/../routes/tenant.php')) {
+                Route::namespace(self::$controllerNamespace)
+                    ->group(__DIR__.'/../routes/tenant.php');
+            }
+        });
+
     }
 
     protected function mapUniversalRoutes(): void
