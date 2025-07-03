@@ -18,8 +18,6 @@ return [
      */
     'central_domains' => [
         'filament-tenancy.test',
-        '127.0.0.1',
-        'localhost',
     ],
 
     /**
