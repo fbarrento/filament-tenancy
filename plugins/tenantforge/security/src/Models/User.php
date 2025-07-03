@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace TenantForge\Security\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Tenant;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,7 +21,7 @@ use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
  * @property $email_verified_at
  * @property $password
  */
-class User extends Authenticatable implements Syncable
+class User extends Authenticatable implements FilamentUser, Syncable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, ResourceSyncing;
@@ -92,5 +94,10 @@ class User extends Authenticatable implements Syncable
             'password',
             'email',
         ];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
     }
 }

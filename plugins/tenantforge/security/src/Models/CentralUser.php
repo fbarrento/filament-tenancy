@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace TenantForge\Security\Models;
 
+use App\Models\Tenant;
 use Database\Factories\CentralUserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,7 +29,7 @@ use Stancl\Tenancy\Database\Models\TenantPivot;
  * @property string $created_at
  * @property string $updated_at
  */
-final class CentralUser extends Authenticatable implements MustVerifyEmail, SyncMaster
+final class CentralUser extends Authenticatable implements FilamentUser, MustVerifyEmail, SyncMaster
 {
     use CentralConnection, Notifiable, ResourceSyncing;
 
@@ -68,5 +71,10 @@ final class CentralUser extends Authenticatable implements MustVerifyEmail, Sync
     public function getGlobalIdentifierKey(): string
     {
         return $this->getAttribute($this->getGlobalIdentifierKeyName());
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
     }
 }

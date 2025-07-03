@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Actions\Tenant;
 
-use App\Models\CentralUser;
 use App\Models\Tenant;
-use App\Models\User;
+use TenantForge\Security\Models\CentralUser;
+use TenantForge\Security\Models\User;
 use Throwable;
 
 use function info;

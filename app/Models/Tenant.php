@@ -12,6 +12,8 @@ use Stancl\Tenancy\Database\Concerns\HasDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDomains;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 use Stancl\Tenancy\Database\Models\TenantPivot;
+use TenantForge\Security\Models\CentralUser;
+use TenantForge\Security\Models\User;
 
 /**
  * @property string $id

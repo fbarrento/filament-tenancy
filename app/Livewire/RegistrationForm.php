@@ -6,7 +6,6 @@ namespace App\Livewire;
 
 use App\Actions\Tenant\CreateTenantDomainAction;
 use App\Actions\Tenant\CreateTenantUserAction;
-use App\Models\CentralUser;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -19,10 +18,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use TenantForge\Security\Models\CentralUser;
 use Throwable;
 
 use function __;
-use function request;
 
 #[Layout('components.layouts.auth')]
 final class RegistrationForm extends Component implements HasActions, HasForms

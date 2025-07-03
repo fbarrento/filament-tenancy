@@ -66,11 +66,11 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', \TenantForge\Security\Models\User::class),
         ],
         'central_users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\CentralUser::class),
+            'model' => env('AUTH_MODEL', \TenantForge\Security\Models\CentralUser::class),
         ],
 
         // 'users' => [

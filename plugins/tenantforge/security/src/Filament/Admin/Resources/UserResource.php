@@ -2,12 +2,12 @@
 
 namespace TenantForge\Security\Filament\Admin\Resources;
 
-use App\Models\CentralUser;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use TenantForge\Security\Filament\Admin\Resources\UserResource\Pages;
+use TenantForge\Security\Models\CentralUser;
 
 class UserResource extends Resource
 {
