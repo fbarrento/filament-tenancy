@@ -18,8 +18,6 @@ return [
      */
     'central_domains' => [
         'filament-tenancy.test',
-        '127.0.0.1',
-        'localhost',
     ],
 
     /**
@@ -34,6 +32,7 @@ return [
         Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper::class,
         Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper::class,
         // Stancl\Tenancy\Bootstrappers\RedisTenancyBootstrapper::class, // Note: phpredis is needed
+
     ],
 
     /**

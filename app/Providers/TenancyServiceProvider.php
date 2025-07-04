@@ -114,10 +114,10 @@ class TenancyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootEvents();
-        $this->prepareLivewireForTenancy();
         $this->mapRoutes();
         $this->mapUniversalRoutes();
         $this->mapCentralRoutes();
+        $this->prepareLivewireForTenancy();
 
         $this->makeTenancyMiddlewareHighestPriority();
     }
