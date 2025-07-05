@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use TenantForge\Security\Models\CentralUser;
+use TenantForge\Security\Database\Seeders\UserSeeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -18,11 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        CentralUser::factory()->create([
-            'global_id' => Str::uuid()->toString(),
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
+        $this->call([
+            UserSeeder::class,
         ]);
+
     }
 }

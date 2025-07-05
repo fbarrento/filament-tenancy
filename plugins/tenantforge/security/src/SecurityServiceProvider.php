@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace TenantForge\Security;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use TenantForge\Security\Enums\Role;
+use TenantForge\Security\Models\CentralUser;
+use TenantForge\Security\Models\User;
+use TenantForge\Security\Policies\CentralUserPolicy;
 
 final class SecurityServiceProvider extends ServiceProvider
 {
@@ -18,6 +23,20 @@ final class SecurityServiceProvider extends ServiceProvider
         $this->mapUniversalRoutes();
         $this->mapTenantRoutes();
         $this->registerViews();
+        $this->configureSuperAdmin();
+        $this->configurePolicies();
+    }
+
+    protected function configurePolicies(): void
+    {
+        Gate::policy(CentralUser::class, CentralUserPolicy::class);
+    }
+
+    protected function configureSuperAdmin(): void
+    {
+        Gate::before(function (CentralUser|User $user, $ability) {
+            return $user->hasRole(Role::SuperAdmin->value) ? true : null;
+        });
     }
 
     protected function registerViews(): void

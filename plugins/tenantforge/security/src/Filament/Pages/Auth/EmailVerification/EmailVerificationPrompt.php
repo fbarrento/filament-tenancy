@@ -7,15 +7,14 @@ namespace TenantForge\Security\Filament\Pages\Auth\EmailVerification;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Pages\Auth\EmailVerification\EmailVerificationPrompt as BaseEmailVerificationPrompt;
 use Livewire\Attributes\Layout;
 
 use function __;
 
 #[Layout('components.layouts.auth')]
-final class EmailVerificationPrompt extends BaseEmailVerificationPrompt
+final class EmailVerificationPrompt extends \Filament\Auth\Pages\EmailVerification\EmailVerificationPrompt
 {
-    protected static string $view = 'tenantforge:security::filament.auth.email-verification.email-verification-prompt';
+    protected string $view = 'tenantforge:security::filament.auth.email-verification.email-verification-prompt';
 
     public function resendNotificationAction(): Action
     {

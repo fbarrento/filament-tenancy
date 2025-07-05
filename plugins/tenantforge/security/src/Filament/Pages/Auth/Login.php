@@ -2,11 +2,10 @@
 
 namespace TenantForge\Security\Filament\Pages\Auth;
 
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Facades\Filament;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Models\Contracts\FilamentUser;
-use Filament\Pages\Auth\Login as BaseLogin;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use TenantForge\Security\Enums\AuthGuard;
@@ -18,9 +17,9 @@ use function app;
 use function session;
 
 #[Layout('components.layouts.auth')]
-class Login extends BaseLogin
+class Login extends \Filament\Auth\Pages\Login
 {
-    protected static string $view = 'tenantforge:security::filament.auth.login';
+    protected string $view = 'tenantforge:security::filament.auth.login';
 
     private CreateTenantSwitcherRouteAction $createTenantSwitcherAction;
 
@@ -59,7 +58,7 @@ class Login extends BaseLogin
 
         if (
             ($user instanceof FilamentUser) &&
-            (! $user->canAccessPanel(Filament::getCurrentPanel()))
+            (! $user->canAccessPanel(Filament::getCurrentOrDefaultPanel()))
         ) {
             Filament::auth()->logout();
 

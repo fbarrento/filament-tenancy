@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TenantForge\Security\Filament\Pages\Auth;
 
 use Exception;
-use Filament\Pages\Auth\Register as BaseRegister;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Layout;
@@ -13,9 +12,9 @@ use Livewire\Attributes\Layout;
 use function method_exists;
 
 #[Layout('components.layouts.auth')]
-final class Register extends BaseRegister
+final class Register extends \Filament\Auth\Pages\Register
 {
-    protected static string $view = 'tenantforge:security::filament.auth.register';
+    protected string $view = 'tenantforge:security::filament.auth.register';
 
     protected function sendEmailVerificationNotification(Model $user): void
     {

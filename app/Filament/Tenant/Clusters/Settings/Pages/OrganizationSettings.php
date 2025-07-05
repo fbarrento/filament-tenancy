@@ -5,14 +5,15 @@ namespace App\Filament\Tenant\Clusters\Settings\Pages;
 use App\Filament\Tenant\Clusters\Settings;
 use App\Models\Tenant;
 use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Schema;
 use Filament\Support\Exceptions\Halt;
 
 use function __;
@@ -20,15 +21,16 @@ use function tenant;
 
 class OrganizationSettings extends Page implements HasForms
 {
-    use InteractsWithForms;
+    use InteractsWithActions;
+    use InteractsWithSchemas;
 
     public ?array $data = [];
 
     public Tenant $tenant;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
-    protected static string $view = 'filament.tenant.clusters.settings.pages.tenant-settings';
+    protected string $view = 'filament.tenant.clusters.settings.pages.tenant-settings';
 
     protected static ?string $cluster = Settings::class;
 
@@ -48,10 +50,10 @@ class OrganizationSettings extends Page implements HasForms
         return __('General Settings');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make(__('General'))
                     ->description(__('Your Organization General Settings'))
                     ->schema([
@@ -76,14 +78,12 @@ class OrganizationSettings extends Page implements HasForms
             ->model($this->tenant);
     }
 
-    protected function getFormActions(): array
+    public function saveAction(): Action
     {
-        return [
-            Action::make('save')
-                ->label(__('Save changes'))
-                ->keyBindings(['command+s', 'ctrl+s'])
-                ->submit('save'),
-        ];
+        return Action::make('save')
+            ->label(__('Save changes'))
+            ->keyBindings(['command+s', 'ctrl+s'])
+            ->submit('save');
     }
 
     public function save(): void
@@ -99,7 +99,7 @@ class OrganizationSettings extends Page implements HasForms
         }
 
         Notification::make()
-            ->title(__('Organization Settings Saved'))
+            ->title(__('Saved'))
             ->success()
             ->send();
 

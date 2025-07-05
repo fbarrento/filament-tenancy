@@ -2,10 +2,20 @@
 
 namespace App\Filament\Admin\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Admin\Resources\TenantResource\Pages\ListTenants;
+use App\Filament\Admin\Resources\TenantResource\Pages\CreateTenant;
+use App\Filament\Admin\Resources\TenantResource\Pages\EditTenant;
 use App\Filament\Admin\Resources\TenantResource\Pages;
 use App\Models\Tenant;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,18 +26,18 @@ class TenantResource extends Resource
 {
     protected static ?string $model = Tenant::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make()
+        return $schema
+            ->components([
+                Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->columnSpanFull()
                             ->required(),
-                        Forms\Components\TextInput::make('domain')
+                        TextInput::make('domain')
                             ->columnSpanFull()
                             ->suffix('.'.request()->getHost()),
                     ]),
@@ -39,17 +49,17 @@ class TenantResource extends Resource
 
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('avatar_url')
+                ImageColumn::make('avatar_url')
                     ->label('Avatar')
                     ->circular(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -57,12 +67,12 @@ class TenantResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -77,9 +87,9 @@ class TenantResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTenants::route('/'),
-            'create' => Pages\CreateTenant::route('/create'),
-            'edit' => Pages\EditTenant::route('/{record}/edit'),
+            'index' => ListTenants::route('/'),
+            'create' => CreateTenant::route('/create'),
+            'edit' => EditTenant::route('/{record}/edit'),
         ];
     }
 }
