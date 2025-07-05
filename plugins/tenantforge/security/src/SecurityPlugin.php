@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TenantForge\Security;
 
+use ReflectionClass;
 use Exception;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
@@ -45,7 +46,7 @@ final class SecurityPlugin implements Plugin
 
     protected function getPluginBatePath(?string $path = null): string
     {
-        $reflector = new \ReflectionClass(get_class($this));
+        $reflector = new ReflectionClass(get_class($this));
 
         return dirname($reflector->getFileName()).($path ?? '');
     }

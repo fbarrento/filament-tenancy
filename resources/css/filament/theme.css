@@ -1,3 +1,60 @@
+@import "tailwindcss";
 @import '../../../vendor/filament/filament/resources/css/theme.css';
 
-@config 'tailwind.config.js';
+@source '../../../app/Filament/**/*.php';
+@source '../../../resources/views/filament/**/*.blade.php';
+@source '../../../resources/views/livewire/**/*.blade.php';
+@source '../../../plugins/tenantforge/**/*.blade.php';
+
+
+/** Tenant Switcher */
+.tf-tenant-switcher {
+    @apply -mx-2 w-full;
+    width: 16rem;
+}
+
+.tf-tenant-switcher .fi-dropdown {
+    width: 100%;
+    position: relative;
+}
+
+/*
+ * Filament V4 Dropdown Width Fix
+ * This uses multiple selectors to target the dropdown panel and all its contents
+ * to ensure a consistent width regardless of content length
+ */
+
+/* Target dropdown panel and its container elements */
+.tf-tenant-switcher .fi-dropdown-panel,
+div.fi-dropdown-panel[data-headlessui-state="open"],
+div[role="menu"][data-headlessui-state] {
+    width: 16rem !important;
+    min-width: 16rem !important;
+    max-width: 16rem !important;
+}
+
+/* Target the dropdown's internal containers and lists */
+.tf-tenant-switcher .fi-dropdown-list,
+.tf-tenant-switcher .fi-dropdown-panel > div {
+    width: 16rem !important;
+    min-width: 16rem !important;
+    max-width: 16rem !important;
+}
+
+/* Ensure dropdown list items are constrained */
+.tf-tenant-switcher .fi-dropdown-list-item,
+.tf-tenant-switcher li[role="menuitem"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+}
+
+/* Force text truncation inside dropdown items */
+.tf-tenant-switcher .fi-dropdown-list-item div,
+.tf-tenant-switcher .fi-dropdown-list-item span,
+.tf-tenant-switcher li[role="menuitem"] span {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}

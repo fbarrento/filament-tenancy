@@ -2,8 +2,8 @@
 
 namespace TenantForge\Security\Http\Responses;
 
+use Filament\Auth\Http\Responses\LoginResponse;
 use App\Models\Tenant;
-use Filament\Http\Responses\Auth\LoginResponse;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Features\SupportRedirects\Redirector;
 use TenantForge\Security\Models\CentralUser;

@@ -26,5 +26,8 @@
         "psr-4": {
             "TenantForge\\Security\\Tests\\": "tests/"
         }
+    },
+    "require": {
+        "spatie/laravel-permission": "^6.20"
     }
 }

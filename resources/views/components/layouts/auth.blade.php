@@ -9,7 +9,7 @@
 
     @filamentStyles
 
-    @vite(['resources/css/filament/theme.css', 'resources/js/app.js'])
+    @vite(['resources/css/filament/theme.css', 'resources/css/app.css', 'resources/js/app.js'])
 
     {{ filament()->getFontHtml() }}
 

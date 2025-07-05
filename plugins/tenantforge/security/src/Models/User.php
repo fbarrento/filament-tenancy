@@ -4,15 +4,16 @@ namespace TenantForge\Security\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Tenant;
-use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection as SupportCollection;
+use Spatie\Permission\Traits\HasRoles;
 use Stancl\Tenancy\Contracts\Syncable;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
+use TenantForge\Security\Database\Factories\UserFactory;
 
 /**
  * @property $id
@@ -24,7 +25,11 @@ use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 class User extends Authenticatable implements FilamentUser, Syncable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, ResourceSyncing;
+    use HasFactory;
+
+    use HasRoles;
+    use Notifiable;
+    use ResourceSyncing;
 
     /**
      * The attributes that are mass assignable.
@@ -99,5 +104,10 @@ class User extends Authenticatable implements FilamentUser, Syncable
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
     }
 }

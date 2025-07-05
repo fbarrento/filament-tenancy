@@ -9,9 +9,9 @@ use function __;
 
 class TenantMembers extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
-    protected static string $view = 'filament.tenant.clusters.settings.pages.organization-members';
+    protected string $view = 'filament.tenant.clusters.settings.pages.organization-members';
 
     protected static ?string $cluster = Settings::class;
 

@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Livewire\Component;
+use TenantForge\Security\Enums\SecurityPermission;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Tenancy\Actions\CreateTenantSwitcherRouteAction;
 
@@ -16,6 +17,8 @@ use function auth;
 class TenantSwitcher extends Component
 {
     public $tenants = [];
+
+    public bool $canAccessAdminPanel = false;
 
     protected CreateTenantSwitcherRouteAction $createTenantSwitcherRoute;
 
@@ -43,6 +46,8 @@ class TenantSwitcher extends Component
                 'id' => $tenant->id,
             ];
         });
+
+        $this->canAccessAdminPanel = $user->can(SecurityPermission::AccessAdminPanel);
 
     }
 

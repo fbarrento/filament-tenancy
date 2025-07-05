@@ -1,24 +1,48 @@
 @import url(https://fonts.bunny.net/css?family=poppins:300,400,500,600,700,800,900);
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@source "../../../resources/views";
-
-
-@theme {
-    --font-sans:  'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-}
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
 
 /* DaisyUI with Tailwind v4 syntax */
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
+  themes:
+    light --default,
+    dark --prefersdark;
 }
+
+@source "../../../resources/views";
 
 /* MaryUI specific styles */
 @source "../../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
 
 /* Theme toggle */
 @custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 /**
 * Paginator - Traditional style

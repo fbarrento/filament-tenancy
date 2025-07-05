@@ -1,14 +1,15 @@
-@php use App\Filament\Tenant\Clusters\Settings\Pages\OrganizationSettings;use App\Helpers\Initials; @endphp
-<div class="-mx-2 w-full">
+@php use App\Filament\Tenant\Clusters\Settings\Pages\OrganizationSettings;use App\Helpers\Initials;use Filament\Support\Icons\Heroicon; @endphp
+<div class="tf-tenant-switcher">
     <x-filament::dropdown placement="bottom-start">
         <x-slot name="trigger">
-            <div class="flex justify-between items-center p-2 rounded-lg w-full ">
+            <div class="flex justify-between items-center p-2 rounded-lg w-full">
                 <div class="flex items-center gap-3">
                     <div
                         class="w-10 h-10 shrink-0 rounded-md flex items-center justify-center {{ tenant('avatar') ? '' : 'bg-gray-200 dark:bg-gray-700' }}">
                         <span class="uppercase">
                             @if (tenant('avatar'))
-                                <img src="{{ tenant('avatar_url') }}" alt="{{ tenant('name') }}" class="w-10 object-contain rounded-md">
+                                <img src="{{ tenant('avatar_url') }}" alt="{{ tenant('name') }}"
+                                     class="w-10 object-contain rounded-md">
                             @else
                                 <span class="font-bold">{{ Initials::generate(tenant('name')) }}</span>
                             @endif
@@ -16,7 +17,7 @@
                     </div>
                     <div class="flex flex-col space-y-0.5 w-full">
                         <div class="w-full">
-                            <span class="line-clamp-1 font-semibold text-sm text-ellipsis overflow-hidden w-full ...">
+                            <span class="line-clamp-1 font-semibold text-sm text-ellipsis overflow-hidden w-full">
                                 {{ tenant('name') }}
                             </span>
                         </div>
@@ -40,11 +41,22 @@
                                             tag="a">
                 {{__('Organization settings')}}
             </x-filament::dropdown.list.item>
+            @if ($this->canAccessAdminPanel)
+                <x-filament::dropdown.list.item icon="heroicon-{{Heroicon::OutlinedAdjustmentsHorizontal}}" href="/something here"
+                                                tag="a">
+                    {{__('Administration')}}
+                </x-filament::dropdown.list.item>
+            @endif
         </x-filament::dropdown.list>
         <x-filament::dropdown.list>
             @foreach ($tenants as $tenant)
-                <x-filament::dropdown.list.item wire:click="switchTenant('{{ $tenant['id'] }}'); close()">
-                    {{ $tenant['name'] }}
+                <x-filament::dropdown.list.item
+                    wire:click="switchTenant('{{ $tenant['id'] }}'); close()"
+                    class="max-w-full"
+                >
+                    <div class="line-clamp-1 text-ellipsis">
+                        {{ $tenant['name'] }}
+                    </div>
                 </x-filament::dropdown.list.item>
             @endforeach
         </x-filament::dropdown.list>
