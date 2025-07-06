@@ -11,6 +11,12 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="Plugins Central Feature Tests">
+            <directory>plugins/**/**/tests/Central/Feature</directory>
+        </testsuite>
+        <testsuite name="Plugins Central Unit Tests">
+            <directory>plugins/**/**/tests/Central/Unit</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
