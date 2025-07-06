@@ -70,6 +70,7 @@ final class CentralUser extends Authenticatable implements FilamentUser, MustVer
             'name',
             'password',
             'email',
+            'notifications',
         ];
     }
 

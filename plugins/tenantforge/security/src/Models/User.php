@@ -98,6 +98,7 @@ class User extends Authenticatable implements FilamentUser, Syncable
             'name',
             'password',
             'email',
+            'notifications',
         ];
     }
 

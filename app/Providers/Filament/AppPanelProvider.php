@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Http\Middleware\SetAppUrlForTenant;
 use App\Http\Middleware\TenantFileUrlMiddleware;
+use App\Livewire\DatabaseNotifications;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -41,6 +42,9 @@ class AppPanelProvider extends PanelProvider
             ])
             ->sidebarWidth('16rem')
             ->maxContentWidth(Width::Full)
+            ->databaseNotifications()
+            ->databaseNotificationsLivewireComponent(DatabaseNotifications::class)
+            ->databaseNotificationsPolling('15s')
             ->discoverResources(in: app_path('Filament/Tenant/App/Resources'), for: 'App\\Filament\\Tenant\\App\\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/App/Pages'), for: 'App\\Filament\\Tenant\\App\\Pages')
             ->discoverClusters(in: app_path('Filament/Tenant/Clusters'), for: 'App\\Filament\\Tenant\\Clusters')

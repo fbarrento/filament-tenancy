@@ -1,6 +1,6 @@
 <div class="fi-topbar-ctn">
     @php
-        $navigation = filament()->getNavigation();
+        use App\Livewire\DatabaseNotifications;$navigation = filament()->getNavigation();
         $isRtl = __('filament-panels::layout.direction') === 'rtl';
         $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
         $isSidebarFullyCollapsibleOnDesktop = filament()->isSidebarFullyCollapsibleOnDesktop();
@@ -81,10 +81,10 @@
             @if(!tenancy()->initialized)
                 @if ($homeUrl = filament()->getHomeUrl())
                     <a {{ \Filament\Support\generate_href_html($homeUrl) }}>
-                        <x-filament-panels::logo />
+                        <x-filament-panels::logo/>
                     </a>
                 @else
-                    <x-filament-panels::logo />
+                    <x-filament-panels::logo/>
                 @endif
             @endif
 
@@ -93,7 +93,7 @@
 
         @if ($hasTopNavigation || (! $hasNavigation))
             @if ($hasTenancy && filament()->hasTenantMenu())
-                <x-filament-panels::tenant-menu />
+                <x-filament-panels::tenant-menu/>
             @endif
 
             @if ($hasNavigation)
@@ -228,13 +228,13 @@
 
             @if (filament()->auth()->check())
                 @if (filament()->hasDatabaseNotifications())
-                    @livewire(Filament\Livewire\DatabaseNotifications::class, [
+                    @livewire(filament()->getCurrentPanel()->getDatabaseNotificationsLivewireComponent(), [
                         'lazy' => filament()->hasLazyLoadedDatabaseNotifications(),
                     ])
                 @endif
 
                 @if (filament()->hasUserMenu())
-                    <x-filament-panels::user-menu />
+                    <x-filament-panels::user-menu/>
                 @endif
             @endif
         </div>
@@ -242,5 +242,5 @@
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::TOPBAR_END) }}
     </nav>
 
-    <x-filament-actions::modals />
+    <x-filament-actions::modals/>
 </div>
