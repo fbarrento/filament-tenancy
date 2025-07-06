@@ -3,22 +3,13 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use TenantForge\Support\Livewire\DatabaseNotifications;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-
-        $this->app->bind(
-            \Filament\Livewire\DatabaseNotifications::class,
-            DatabaseNotifications::class
-        );
-
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.

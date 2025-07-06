@@ -16,9 +16,18 @@ final class SupportServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
+        $this->registerMigrations();
+
         $this->commands([
             PluginsMigrate::class,
         ]);
+
+        $this->configureLivewireComponents();
+    }
+
+    protected function registerMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     public function configureLivewireComponents(): void
