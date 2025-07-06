@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Http\Middleware\SetAppUrlForTenant;
 use App\Http\Middleware\TenantFileUrlMiddleware;
-use App\Livewire\DatabaseNotifications;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -24,6 +23,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use TenantForge\Support\Livewire\DatabaseNotifications;
 
 use function app_path;
 use function tenancy;

@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use App\Livewire\DatabaseNotifications;
 use Illuminate\Support\ServiceProvider;
-use Livewire\Livewire;
+use TenantForge\Support\Livewire\DatabaseNotifications;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,11 +23,5 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-        if (class_exists(Livewire::class)) {
-            Livewire::component('database-notifications', DatabaseNotifications::class);
-        }
-
-    }
+    public function boot(): void {}
 }

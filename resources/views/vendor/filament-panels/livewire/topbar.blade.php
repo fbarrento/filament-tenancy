@@ -1,6 +1,6 @@
 <div class="fi-topbar-ctn">
     @php
-        use App\Livewire\DatabaseNotifications;$navigation = filament()->getNavigation();
+        $navigation = filament()->getNavigation();
         $isRtl = __('filament-panels::layout.direction') === 'rtl';
         $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
         $isSidebarFullyCollapsibleOnDesktop = filament()->isSidebarFullyCollapsibleOnDesktop();

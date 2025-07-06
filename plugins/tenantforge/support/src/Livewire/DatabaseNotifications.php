@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace TenantForge\Support\Livewire;
 
 use Filament\Facades\Filament;
 use Filament\Livewire\DatabaseNotifications as BaseDatabaseNotifications;
