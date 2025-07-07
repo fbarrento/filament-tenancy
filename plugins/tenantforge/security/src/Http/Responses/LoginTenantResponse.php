@@ -3,12 +3,12 @@
 namespace TenantForge\Security\Http\Responses;
 
 use Filament\Auth\Http\Responses\LoginResponse;
-use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Features\SupportRedirects\Redirector;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\User;
 use TenantForge\Tenancy\Actions\CreateTenantSwitcherRouteAction;
+use TenantForge\Tenancy\Models\Tenant;
 
 class LoginTenantResponse extends LoginResponse
 {

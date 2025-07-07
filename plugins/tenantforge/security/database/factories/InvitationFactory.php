@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TenantForge\Security\Database\Factories;
 
-use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -12,6 +11,7 @@ use TenantForge\Security\Enums\InvitationStatus;
 use TenantForge\Security\Enums\InvitationType;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\Invitation;
+use TenantForge\Tenancy\Models\Tenant;
 
 /**
  * @extends Factory<Invitation>

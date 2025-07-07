@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Models\Tenant;
+use TenantForge\Tenancy\Models\Tenant;
 
 use function is_dir;
 use function mkdir;

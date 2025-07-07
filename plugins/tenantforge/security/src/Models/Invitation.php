@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TenantForge\Security\Models;
 
-use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +14,7 @@ use Stancl\Tenancy\Database\Concerns\CentralConnection;
 use TenantForge\Security\Database\Factories\InvitationFactory;
 use TenantForge\Security\Enums\InvitationStatus;
 use TenantForge\Security\Enums\InvitationType;
+use TenantForge\Tenancy\Models\Tenant;
 
 /**
  * Invitation Model for inviting users to tenants or central application.

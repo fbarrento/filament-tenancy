@@ -3,7 +3,6 @@
 namespace TenantForge\Security\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Tenant;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Stancl\Tenancy\Contracts\Syncable;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 use TenantForge\Security\Database\Factories\UserFactory;
+use TenantForge\Tenancy\Models\Tenant;
 
 /**
  * @property $id

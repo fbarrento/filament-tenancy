@@ -6,8 +6,8 @@ namespace TenantForge\Tenancy\Actions;
 
 use const PHP_URL_HOST;
 
-use App\Models\Tenant;
 use TenantForge\Security\Models\User;
+use TenantForge\Tenancy\Models\Tenant;
 
 use function config;
 use function parse_url;

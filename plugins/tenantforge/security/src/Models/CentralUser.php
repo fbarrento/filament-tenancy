@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TenantForge\Security\Models;
 
-use App\Models\Tenant;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -18,7 +17,9 @@ use Stancl\Tenancy\Database\Concerns\CentralConnection;
 use Stancl\Tenancy\Database\Concerns\ResourceSyncing;
 use Stancl\Tenancy\Database\Models\TenantPivot;
 use TenantForge\Security\Database\Factories\CentralUserFactory;
+use TenantForge\Security\Enums\AuthGuard;
 use TenantForge\Security\Enums\SecurityPermission;
+use TenantForge\Tenancy\Models\Tenant;
 
 /**
  * @property string $id
@@ -42,6 +43,8 @@ final class CentralUser extends Authenticatable implements FilamentUser, MustVer
     use Notifiable;
 
     public $table = 'users';
+
+    protected string $guard_name = AuthGuard::Central->value;
 
     public function tenants(): BelongsToMany
     {
@@ -79,9 +82,14 @@ final class CentralUser extends Authenticatable implements FilamentUser, MustVer
         return $this->getAttribute($this->getGlobalIdentifierKeyName());
     }
 
+    protected function getDefaultGuardName(): string
+    {
+        return $this->guard_name;
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->can(SecurityPermission::AccessAdminPanel->value);
+        return $this->can(SecurityPermission::AccessAdminPanel);
     }
 
     public static function newFactory(): CentralUserFactory
