@@ -6,6 +6,7 @@ namespace TenantForge\Security\Actions;
 
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
+use TenantForge\Security\Enums\InvitationStatus;
 use TenantForge\Security\Models\Invitation;
 use TenantForge\Security\Notifications\InvitationNotification;
 
@@ -24,6 +25,13 @@ class SendInvitationNotificationAction
         // Send the notification to the invited email
         Notification::route('mail', $invitation->email)
             ->notify(new InvitationNotification($invitation, $acceptUrl));
+
+        if ($invitation->status !== InvitationStatus::PENDING) {
+            $invitation->update([
+                'status' => InvitationStatus::PENDING,
+            ]);
+        }
+
     }
 
     /**

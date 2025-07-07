@@ -26,7 +26,6 @@ use TenantForge\Security\Actions\CreateInvitationAction;
 use TenantForge\Security\Actions\RevokeInvitationAction;
 use TenantForge\Security\Actions\SendInvitationNotificationAction;
 use TenantForge\Security\Enums\InvitationStatus;
-use TenantForge\Security\Enums\SecurityPermission;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\Invitation;
 
@@ -142,9 +141,17 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                                 ->body('You have revoked the invitation to '.$record->email)
                                 ->success()
                                 ->send();
-                        }),
+                        })
+                        ->extraAttributes(['x-on:mousedown' => 'toggle']),
                     Action::make('resend')
-                        ->hidden(fn (): bool => auth()->user()->cannot(SecurityPermission::ResendInvites))
+                        ->authorize('resend', Invitation::class)
+                        ->authorizationMessage(__('You cannot resend this invitation.'))
+                        ->authorizationTooltip()
+                        ->requiresConfirmation(fn (Invitation $record): bool => $record->status !== InvitationStatus::PENDING)
+                        ->modalHidden(fn (Invitation $record): bool => $record->status === InvitationStatus::PENDING)
+                        ->modalDescription(__('Are you sure you want to resend this invitation? This will send an email to the user. And the invitation will be marked as pending.'))
+                        ->modalSubmitActionLabel(__('Yes, Resend it'))
+                        ->color('warning')
                         ->action(function (Invitation $record, SendInvitationNotificationAction $sendInvitationAction): void {
                             $sendInvitationAction->handle($record);
                             Notification::make()
@@ -156,9 +163,14 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                         ->icon(Heroicon::OutlinedPaperAirplane)
                         ->extraAttributes(['x-on:mousedown' => 'toggle']),
                     Action::make('delete')
-                        ->hidden(fn (): bool => auth()->user()->cannot(SecurityPermission::DeleteInvites))
+                        ->authorize('delete', Invitation::class)
+                        ->authorizationMessage(__('You cannot delete this invitation.'))
+                        ->authorizationTooltip()
+                        ->requiresConfirmation()
+                        ->modalSubmitActionLabel(__('Yes, delete it'))
                         ->color('danger')
-                        ->icon(Heroicon::OutlinedTrash),
+                        ->icon(Heroicon::OutlinedTrash)
+                        ->extraAttributes(['x-on:mousedown' => 'toggle']),
                 ]),
             ]);
     }
