@@ -5,8 +5,8 @@ namespace App\Filament\Admin\Resources\TenantResource\Pages;
 use App\Actions\Tenant\CreateTenantDomainAction;
 use App\Actions\Tenant\CreateTenantUserAction;
 use App\Filament\Admin\Resources\TenantResource;
-use App\Models\Tenant;
 use Filament\Resources\Pages\CreateRecord;
+use TenantForge\Tenancy\Models\Tenant;
 use Throwable;
 
 use function auth;

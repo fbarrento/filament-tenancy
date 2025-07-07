@@ -3,7 +3,6 @@
 namespace App\Filament\Tenant\Clusters\Settings\Pages;
 
 use App\Filament\Tenant\Clusters\Settings;
-use App\Models\Tenant;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\FileUpload;
@@ -15,6 +14,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Schema;
 use Filament\Support\Exceptions\Halt;
+use TenantForge\Tenancy\Models\Tenant;
 
 use function __;
 use function tenant;

@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace TenantForge\Security\Actions;
 
-use App\Models\Tenant;
+use InvalidArgumentException;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\Invitation;
+use TenantForge\Tenancy\Models\Tenant;
 
-class CreateInvitationAction
+final class CreateInvitationAction
 {
+    public function __construct(
+        private SendInvitationNotificationAction $sendInvitationNotificationAction,
+    ) {}
+
     /**
      * Create a new invitation.
      *
@@ -21,7 +26,7 @@ class CreateInvitationAction
      * @param  int  $expiresInDays  Number of days until the invitation expires
      * @return Invitation The created invitation
      *
-     * @throws \InvalidArgumentException If an invitation already exists
+     * @throws InvalidArgumentException If an invitation already exists
      */
     public function handle(
         string $email,
@@ -37,13 +42,17 @@ class CreateInvitationAction
                 throw new \InvalidArgumentException("A pending invitation for {$email} to this tenant already exists.");
             }
 
-            return Invitation::createForTenant($email, $tenant, $inviter, $role, $metadata, $expiresInDays);
+            $invitation = Invitation::createForTenant($email, $tenant, $inviter, $role, $metadata, $expiresInDays);
         } else {
             if (Invitation::hasPendingInvitationForCentral($email)) {
                 throw new \InvalidArgumentException("A pending invitation for {$email} to the central application already exists.");
             }
 
-            return Invitation::createForCentral($email, $inviter, $role, $metadata, $expiresInDays);
+            $invitation = Invitation::createForCentral($email, $inviter, $role, $metadata, $expiresInDays);
         }
+
+        $this->sendInvitationNotificationAction->handle($invitation);
+
+        return $invitation;
     }
 }

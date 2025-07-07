@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Models\Tenant;
 use Illuminate\Support\Facades\Storage;
+use TenantForge\Tenancy\Models\Tenant;
 
 use function info;
 use function storage_path;

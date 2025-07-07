@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
@@ -11,6 +10,7 @@ use Livewire\Component;
 use TenantForge\Security\Enums\SecurityPermission;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Tenancy\Actions\CreateTenantSwitcherRouteAction;
+use TenantForge\Tenancy\Models\Tenant;
 
 use function auth;
 

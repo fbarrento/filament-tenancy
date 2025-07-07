@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace TenantForge\Tenancy\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
@@ -14,6 +15,7 @@ use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 use Stancl\Tenancy\Database\Models\TenantPivot;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\User;
+use TenantForge\Tenancy\Database\Factories\TenantFactory;
 
 /**
  * @property string $id
@@ -25,6 +27,9 @@ use TenantForge\Security\Models\User;
 final class Tenant extends BaseTenant implements TenantWithDatabase
 {
     use HasDatabase, HasDomains;
+
+    /** @use HasFactory<TenantFactory> */
+    use HasFactory;
 
     /**
      * @return array<int,string>
@@ -63,5 +68,10 @@ final class Tenant extends BaseTenant implements TenantWithDatabase
     {
         return $this->belongsToMany(CentralUser::class, 'tenant_users', 'tenant_id', 'global_user_id', 'id', 'global_id')
             ->using(TenantPivot::class);
+    }
+
+    protected static function newFactory(): TenantFactory
+    {
+        return TenantFactory::new();
     }
 }

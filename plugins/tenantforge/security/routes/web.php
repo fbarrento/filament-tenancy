@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use TenantForge\Security\Filament\Pages\Auth\EmailVerification\EmailVerificationPrompt;
 use TenantForge\Security\Filament\Pages\Auth\Login;
 use TenantForge\Security\Filament\Pages\Auth\Register;
+use TenantForge\Security\Models\Invitation;
 
 Route::get('/sign-in', Login::class)
     ->name('login');
@@ -24,3 +25,8 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })
     ->middleware(['auth:central', 'signed'])
     ->name('verification.verify');
+
+Route::get('/invitation/{token}', function (Invitation $invitation) {
+    $invitation->markAsAccepted();
+})
+    ->name('invitations.accept');
