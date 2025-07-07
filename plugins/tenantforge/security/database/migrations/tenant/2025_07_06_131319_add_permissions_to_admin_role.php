@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\Models\Role;
 use TenantForge\Security\Enums\AuthGuard;
-use TenantForge\Security\Enums\Role as RoleEnum;
+use TenantForge\Security\Enums\SecurityRole as RoleEnum;
 
 return new class extends Migration
 {

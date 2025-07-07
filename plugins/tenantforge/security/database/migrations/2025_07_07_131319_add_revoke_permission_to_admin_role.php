@@ -17,25 +17,16 @@ return new class extends Migration
     public function up(): void
     {
 
-        $superAdmin = Role::findOrCreate(
-            name: RoleEnum::SuperAdmin->value,
-            guardName: AuthGuard::Central->value,
-        );
         $admin = Role::findOrCreate(
             name: RoleEnum::Admin->value,
             guardName: AuthGuard::Central->value,
         );
-        $guest = Role::findOrCreate(
-            name: RoleEnum::Guest->value,
+
+        Permission::findOrCreate(
+            name: SecurityPermission::RevokeInvites->value,
             guardName: AuthGuard::Central->value,
         );
 
-        $accessAdminPanel = Permission::findOrCreate(
-            name: SecurityPermission::AccessAdminPanel->value,
-            guardName: AuthGuard::Central->value,
-        );
-
-        $accessAdminPanel->assignRole($admin);
-
+        $admin->givePermissionTo(SecurityPermission::RevokeInvites);
     }
 };

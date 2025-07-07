@@ -3,6 +3,7 @@
 namespace App\Filament\Tenant\Clusters\Settings\Pages;
 
 use App\Filament\Tenant\Clusters\Settings;
+use BackedEnum;
 use Exception;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -22,6 +23,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
 use TenantForge\Security\Actions\CreateInvitationAction;
+use TenantForge\Security\Actions\RevokeInvitationAction;
 use TenantForge\Security\Actions\SendInvitationNotificationAction;
 use TenantForge\Security\Enums\InvitationStatus;
 use TenantForge\Security\Models\CentralUser;
@@ -37,7 +39,7 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
     use InteractsWithSchemas;
     use InteractsWithTable;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected string $view = 'filament.tenant.clusters.settings.pages.organization-members';
 
@@ -72,7 +74,7 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                         ->required(),
                     Select::make('role')
                         ->options(function () {
-                            return Role::query()->whereNot('name', \TenantForge\Security\Enums\Role::Owner)->pluck('name', 'name');
+                            return Role::query()->whereNot('name', \TenantForge\Security\Enums\SecurityRole::Owner)->pluck('name', 'name');
                         }),
                 ])
                 ->modalSubmitAction(fn (Action $action) => $action->label(__('Send Invite'))->icon(Heroicon::OutlinedPaperAirplane))
@@ -117,7 +119,7 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                     ->badge(),
                 SelectColumn::make('role')
                     ->options(function () {
-                        return Role::query()->whereNot('name', \TenantForge\Security\Enums\Role::Owner)->pluck('name', 'name');
+                        return Role::query()->whereNot('name', \TenantForge\Security\Enums\SecurityRole::Owner)->pluck('name', 'name');
                     })
                     ->disabled(fn (Invitation $record): bool => $record->status !== InvitationStatus::PENDING)
 
@@ -127,9 +129,30 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
             ->recordActions([
                 ActionGroup::make([
                     Action::make('revoke')
-                        ->icon(Heroicon::OutlinedMinusCircle),
+                        ->hidden(fn (Invitation $record): bool => $record->status !== InvitationStatus::PENDING)
+                        ->authorize('revoke', Invitation::class)
+                        ->authorizationMessage(__('You cannot revoke this invitation.'))
+                        ->authorizationTooltip()
+                        ->icon(Heroicon::OutlinedMinusCircle)
+                        ->action(function (Invitation $record, RevokeInvitationAction $revokeInvitationAction): void {
+                            $revokeInvitationAction->handle($record, auth()->user());
+                            Notification::make()
+                                ->title(__('Invitation Revoked'))
+                                ->body('You have revoked the invitation to '.$record->email)
+                                ->success()
+                                ->send();
+                        })
+                        ->extraAttributes(['x-on:mousedown' => 'toggle']),
                     Action::make('resend')
-                        ->action(function (Action $action, Invitation $record, SendInvitationNotificationAction $sendInvitationAction): void {
+                        ->authorize('resend', Invitation::class)
+                        ->authorizationMessage(__('You cannot resend this invitation.'))
+                        ->authorizationTooltip()
+                        ->requiresConfirmation(fn (Invitation $record): bool => $record->status !== InvitationStatus::PENDING)
+                        ->modalHidden(fn (Invitation $record): bool => $record->status === InvitationStatus::PENDING)
+                        ->modalDescription(__('Are you sure you want to resend this invitation? This will send an email to the user. And the invitation will be marked as pending.'))
+                        ->modalSubmitActionLabel(__('Yes, Resend it'))
+                        ->color('warning')
+                        ->action(function (Invitation $record, SendInvitationNotificationAction $sendInvitationAction): void {
                             $sendInvitationAction->handle($record);
                             Notification::make()
                                 ->title(__('Invitation Resent'))
@@ -140,8 +163,14 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                         ->icon(Heroicon::OutlinedPaperAirplane)
                         ->extraAttributes(['x-on:mousedown' => 'toggle']),
                     Action::make('delete')
+                        ->authorize('delete', Invitation::class)
+                        ->authorizationMessage(__('You cannot delete this invitation.'))
+                        ->authorizationTooltip()
+                        ->requiresConfirmation()
+                        ->modalSubmitActionLabel(__('Yes, delete it'))
                         ->color('danger')
-                        ->icon(Heroicon::OutlinedTrash),
+                        ->icon(Heroicon::OutlinedTrash)
+                        ->extraAttributes(['x-on:mousedown' => 'toggle']),
                 ]),
             ]);
     }
