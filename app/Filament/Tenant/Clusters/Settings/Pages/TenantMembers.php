@@ -3,6 +3,7 @@
 namespace App\Filament\Tenant\Clusters\Settings\Pages;
 
 use App\Filament\Tenant\Clusters\Settings;
+use BackedEnum;
 use Exception;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -22,8 +23,10 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
 use TenantForge\Security\Actions\CreateInvitationAction;
+use TenantForge\Security\Actions\RevokeInvitationAction;
 use TenantForge\Security\Actions\SendInvitationNotificationAction;
 use TenantForge\Security\Enums\InvitationStatus;
+use TenantForge\Security\Enums\SecurityPermission;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\Invitation;
 
@@ -37,7 +40,7 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
     use InteractsWithSchemas;
     use InteractsWithTable;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected string $view = 'filament.tenant.clusters.settings.pages.organization-members';
 
@@ -127,9 +130,22 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
             ->recordActions([
                 ActionGroup::make([
                     Action::make('revoke')
-                        ->icon(Heroicon::OutlinedMinusCircle),
+                        ->hidden(fn (Invitation $record): bool => $record->status !== InvitationStatus::PENDING)
+                        ->authorize('revoke', Invitation::class)
+                        ->authorizationMessage(__('You cannot revoke this invitation.'))
+                        ->authorizationTooltip()
+                        ->icon(Heroicon::OutlinedMinusCircle)
+                        ->action(function (Invitation $record, RevokeInvitationAction $revokeInvitationAction): void {
+                            $revokeInvitationAction->handle($record, auth()->user());
+                            Notification::make()
+                                ->title(__('Invitation Revoked'))
+                                ->body('You have revoked the invitation to '.$record->email)
+                                ->success()
+                                ->send();
+                        }),
                     Action::make('resend')
-                        ->action(function (Action $action, Invitation $record, SendInvitationNotificationAction $sendInvitationAction): void {
+                        ->hidden(fn (): bool => auth()->user()->cannot(SecurityPermission::ResendInvites))
+                        ->action(function (Invitation $record, SendInvitationNotificationAction $sendInvitationAction): void {
                             $sendInvitationAction->handle($record);
                             Notification::make()
                                 ->title(__('Invitation Resent'))
@@ -140,6 +156,7 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                         ->icon(Heroicon::OutlinedPaperAirplane)
                         ->extraAttributes(['x-on:mousedown' => 'toggle']),
                     Action::make('delete')
+                        ->hidden(fn (): bool => auth()->user()->cannot(SecurityPermission::DeleteInvites))
                         ->color('danger')
                         ->icon(Heroicon::OutlinedTrash),
                 ]),

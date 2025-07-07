@@ -19,6 +19,8 @@ enum SecurityPermission: string
     case DeleteInvites = 'delete invites';
     case ResendInvites = 'resend invites';
 
+    case RevokeInvites = 'revoke invites';
+
     case CreateTenants = 'create tenants';
     case ViewTenants = 'view tenants';
     case EditTenants = 'edit tenants';
