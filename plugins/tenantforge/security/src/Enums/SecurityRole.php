@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TenantForge\Security\Enums;
 
-enum Role: string
+enum SecurityRole: string
 {
     case Admin = 'admin';
     case SuperAdmin = 'super-admin';

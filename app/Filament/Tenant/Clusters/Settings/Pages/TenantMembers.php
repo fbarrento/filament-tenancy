@@ -72,7 +72,7 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                         ->required(),
                     Select::make('role')
                         ->options(function () {
-                            return Role::query()->whereNot('name', \TenantForge\Security\Enums\Role::Owner)->pluck('name', 'name');
+                            return Role::query()->whereNot('name', \TenantForge\Security\Enums\SecurityRole::Owner)->pluck('name', 'name');
                         }),
                 ])
                 ->modalSubmitAction(fn (Action $action) => $action->label(__('Send Invite'))->icon(Heroicon::OutlinedPaperAirplane))
@@ -117,7 +117,7 @@ class TenantMembers extends Page implements HasActions, HasSchemas, HasTable
                     ->badge(),
                 SelectColumn::make('role')
                     ->options(function () {
-                        return Role::query()->whereNot('name', \TenantForge\Security\Enums\Role::Owner)->pluck('name', 'name');
+                        return Role::query()->whereNot('name', \TenantForge\Security\Enums\SecurityRole::Owner)->pluck('name', 'name');
                     })
                     ->disabled(fn (Invitation $record): bool => $record->status !== InvitationStatus::PENDING)
 

@@ -5,7 +5,7 @@ namespace TenantForge\Security\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use TenantForge\Security\Enums\Role;
+use TenantForge\Security\Enums\SecurityRole;
 use TenantForge\Security\Models\CentralUser;
 
 class UserSeeder extends Seeder
@@ -43,8 +43,8 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]);
 
-        $admin->assignRole(Role::Admin);
-        $superAdmin->assignRole(Role::SuperAdmin);
-        $guest->assignRole(Role::Guest);
+        $admin->assignRole(SecurityRole::Admin);
+        $superAdmin->assignRole(SecurityRole::SuperAdmin);
+        $guest->assignRole(SecurityRole::Guest);
     }
 }

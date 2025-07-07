@@ -7,7 +7,7 @@ namespace TenantForge\Security;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use TenantForge\Security\Enums\Role;
+use TenantForge\Security\Enums\SecurityRole;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\User;
 use TenantForge\Security\Policies\CentralUserPolicy;
@@ -35,7 +35,7 @@ final class SecurityServiceProvider extends ServiceProvider
     protected function configureSuperAdmin(): void
     {
         Gate::before(function (CentralUser|User $user, $ability) {
-            return $user->hasRole(Role::SuperAdmin->value) ? true : null;
+            return $user->hasRole(SecurityRole::SuperAdmin->value) ? true : null;
         });
     }
 
