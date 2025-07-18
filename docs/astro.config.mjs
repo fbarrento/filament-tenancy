@@ -9,6 +9,14 @@ export default defineConfig({
 			title: 'TenantForge',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/tenant-forge/tenant-forge-starter-kit' }],
 			sidebar: [
+                {
+                    label: 'Getting Started',
+                    items: [
+                        // Each item here is one entry in the navigation menu.
+                        { label: 'Introduction', slug: 'getting-started/introduction' },
+                        { label: 'Installation', slug: 'getting-started/installation' },
+                    ],
+                },
 				{
 					label: 'Guides',
 					items: [
