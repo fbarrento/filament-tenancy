@@ -12,7 +12,6 @@ final class ImpersonateController
 {
     public function index(Request $request, string $token): RedirectResponse
     {
-
         return UserImpersonation::makeResponse($token);
 
     }

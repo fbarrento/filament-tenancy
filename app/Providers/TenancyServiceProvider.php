@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Features\SupportFileUploads\FilePreviewController;
 use Livewire\Livewire;
+use Spatie\Permission\PermissionRegistrar;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
 use Stancl\Tenancy\Jobs;
 use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
 
+use function app;
 use function base_path;
 use function config;
 use function file_exists;
@@ -89,10 +91,20 @@ class TenancyServiceProvider extends ServiceProvider
             Events\EndingTenancy::class => [],
             Events\TenancyEnded::class => [
                 Listeners\RevertToCentralContext::class,
+                function (Events\TenancyEnded $event) {
+                    $permissionRegistrar = app(PermissionRegistrar::class);
+                    $permissionRegistrar->cacheKey = 'spatie.permission.cache';
+                },
             ],
 
             Events\BootstrappingTenancy::class => [],
-            Events\TenancyBootstrapped::class => [],
+            Events\TenancyBootstrapped::class => [
+                function (Events\TenancyBootstrapped $event) {
+                    $permissionRegistrar = app(PermissionRegistrar::class);
+                    $permissionRegistrar->cacheKey = 'spatie.permission.cache.tenant.'.$event->tenancy->tenant->getTenantKey();
+
+                },
+            ],
             Events\RevertingToCentralContext::class => [],
             Events\RevertedToCentralContext::class => [],
 

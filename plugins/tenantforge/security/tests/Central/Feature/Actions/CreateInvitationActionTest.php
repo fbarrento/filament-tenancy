@@ -1,6 +1,6 @@
 <?php
 
-use TenantForge\Security\Actions\CreateInvitationAction;
+use TenantForge\Security\Actions\Invitation\CreateInvitationAction;
 use TenantForge\Security\Models\CentralUser;
 use TenantForge\Security\Models\Invitation;
 use TenantForge\Tenancy\Models\Tenant;
