@@ -21,7 +21,6 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
-        "@nuxt/content": "^3.6.3",
         "@tailwindcss/postcss": "^4.1.11"
     }
 }
