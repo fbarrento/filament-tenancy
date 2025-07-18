@@ -1,7 +1,7 @@
 <?php
 
 use Spatie\Permission\Models\Permission;
-use TenantForge\Security\Actions\RevokeInvitationAction;
+use TenantForge\Security\Actions\Invitation\RevokeInvitationAction;
 use TenantForge\Security\Enums\InvitationStatus;
 use TenantForge\Security\Enums\SecurityPermission;
 use TenantForge\Security\Models\CentralUser;

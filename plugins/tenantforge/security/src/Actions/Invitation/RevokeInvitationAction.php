@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TenantForge\Security\Actions;
+namespace TenantForge\Security\Actions\Invitation;
 
 use InvalidArgumentException;
 use TenantForge\Security\Enums\InvitationStatus;

@@ -37,6 +37,7 @@ class LoginTenantResponse extends LoginResponse
 
     public function toResponse($request): RedirectResponse|Redirector
     {
+
         return redirect()->away(
             $this->createTenantSwitcherRoute->handle($this->tenant, $this->user->global_id)
         );

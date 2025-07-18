@@ -2,8 +2,8 @@
 
 namespace TenantForge\Security\Filament\Pages\Auth;
 
-use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Support\Facades\Auth;
@@ -48,8 +48,8 @@ class Login extends \Filament\Auth\Pages\Login
         $user = Auth::guard(AuthGuard::Central->value)->user();
 
         // If the user belongs to at least 1 tenant, we should redirect the user to the first tenant.
+        if ($user->tenants->count() > 0) {
 
-        if ($user->tenants->count() > 1) {
             return app(LoginTenantResponse::class)
                 ->user($user)
                 ->tenant($user->tenants->first());

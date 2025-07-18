@@ -107,6 +107,16 @@ class Invitation extends Model
         return $this->belongsTo(CentralUser::class, 'inviter_id', 'global_id');
     }
 
+    public function isTenantInvitation(): bool
+    {
+        return $this->type === InvitationType::TENANT;
+    }
+
+    public function isCentralInvitation(): bool
+    {
+        return $this->type === InvitationType::CENTRAL;
+    }
+
     /**
      * Mark the invitation as accepted.
      */
